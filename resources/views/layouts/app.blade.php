@@ -47,5 +47,6 @@
     <footer>
         <p>&copy; {{ date('Y') }} Bukuku </p>
     </footer>
+    @yield('scripts')
 </body>
 </html>

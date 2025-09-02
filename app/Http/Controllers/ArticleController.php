@@ -75,13 +75,24 @@ class ArticleController extends Controller
 
     public function search(Request $request)
     {
-        $query = $request->input('q');
+    $query = $request->input('q');
 
-        $articles = Article::where('title', 'like', "%$query%")
-            ->orWhere('content', 'like', "%$query%")
-            ->get();
+    $articles = Article::where('title', 'like', "%{$query}%")
+                       ->orWhere('content', 'like', "%{$query}%")
+                       ->get();
 
-        return view('articles.index', compact('articles', 'query'));
+    if ($request->ajax()) {
+        $results = [];
+        foreach ($articles as $article) {
+            $results[] = [
+                'id' => $article->id,
+                'title' => $article->title
+            ];
+        }
+        return response()->json($results);
+    }
+
+    return view('articles.index', compact('articles'));
     }
 
     // Form edit artikel
